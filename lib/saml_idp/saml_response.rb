@@ -60,6 +60,7 @@ module SamlIdp
 
     def assertion_builder
       @assertion_builder ||= AssertionBuilder.new reference_id,
+        issuer_format,
         issuer_uri,
         principal,
         audience_uri,

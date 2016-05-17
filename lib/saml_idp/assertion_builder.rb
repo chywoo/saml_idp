@@ -14,10 +14,11 @@ module SamlIdp
     attr_accessor :raw_algorithm
     attr_accessor :authn_context_classref
     attr_accessor :expiry
+    attr_accessor :issuer_format
 
     delegate :config, to: :SamlIdp
 
-    def initialize(reference_id, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60)
+    def initialize(reference_id, issuer_format, issuer_uri, principal, audience_uri, saml_request_id, saml_acs_url, raw_algorithm, authn_context_classref, expiry=60*60)
       self.reference_id = reference_id
       self.issuer_uri = issuer_uri
       self.principal = principal
@@ -27,6 +28,7 @@ module SamlIdp
       self.raw_algorithm = raw_algorithm
       self.authn_context_classref = authn_context_classref
       self.expiry = expiry
+      self.issuer_format = issuer_format
     end
 
     def fresh
@@ -35,7 +37,11 @@ module SamlIdp
         ID: reference_string,
         IssueInstant: now_iso,
         Version: "2.0" do |assertion|
-          assertion.Issuer issuer_uri
+          if issuer_format == true
+            assertion.Issuer issuer_uri, Format: "urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+          else
+            assertion.Issuer issuer_uri
+          end
           sign assertion
           assertion.Subject do |subject|
             subject.NameID name_id, Format: name_id_format[:name]
