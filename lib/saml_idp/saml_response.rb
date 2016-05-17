@@ -15,10 +15,12 @@ module SamlIdp
     attr_accessor :x509_certificate
     attr_accessor :authn_context_classref
     attr_accessor :expiry
+    attr_accessor :issuer_format
 
     def initialize(reference_id,
           response_id,
           issuer_uri,
+          issuer_format,
           principal,
           audience_uri,
           saml_request_id,
@@ -30,6 +32,7 @@ module SamlIdp
       self.reference_id = reference_id
       self.response_id = response_id
       self.issuer_uri = issuer_uri
+      self.issuer_format = issuer_format
       self.principal = principal
       self.audience_uri = audience_uri
       self.saml_request_id = saml_request_id
@@ -51,7 +54,7 @@ module SamlIdp
     private :signed_assertion
 
     def response_builder
-      ResponseBuilder.new(response_id, issuer_uri, saml_acs_url, saml_request_id, signed_assertion)
+      ResponseBuilder.new(response_id, issuer_uri, issuer_format, saml_acs_url, saml_request_id, signed_assertion)
     end
     private :response_builder
 

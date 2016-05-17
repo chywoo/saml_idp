@@ -39,6 +39,7 @@ module SamlIdp
         InResponseTo: saml_request_id,
         "xmlns:samlp" => Saml::XML::Namespaces::PROTOCOL do |response|
           response.Issuer issuer_uri, xmlns: Saml::XML::Namespaces::ASSERTION
+          issuer_uri, Format: "urn:oasis:names:tc:SAML:2.0:nameid-format:entity" if issuer_format == true
           response.tag! "samlp:Status" do |status|
             status.tag! "samlp:StatusCode", Value: Saml::XML::Namespaces::Statuses::SUCCESS
           end

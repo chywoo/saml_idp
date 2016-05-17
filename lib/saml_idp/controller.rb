@@ -34,11 +34,13 @@ module SamlIdp
       response_id, reference_id = get_saml_response_id, get_saml_reference_id
       audience_uri = opts[:audience_uri] || saml_request.issuer || saml_acs_url[/^(.*?\/\/.*?\/)/, 1]
       opt_issuer_uri = opts[:issuer_uri] || issuer_uri
+      issuer_format = opts[:issuer_format]
 
       SamlResponse.new(
         reference_id,
         response_id,
         opt_issuer_uri,
+        issuer_format,
         principal,
         audience_uri,
         saml_request_id,
